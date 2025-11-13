@@ -71,20 +71,40 @@
             flex-shrink: 0;
             padding: 3rem 1rem 1.5rem 1rem;
             text-align: center;
+            z-index: 5;
         }
         #hero .image-area-wrapper {
             flex-grow: 1;
             min-height: 0;
             position: relative;
+            perspective: 1000px;
+        }
+        .image-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 1rem;
+            will-change: transform, opacity;
         }
-        #hero .stylized-image {
+        .stylized-image {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+        }
+        #inscription-container {
+            width: 45%;
+            height: 80%;
+            z-index: 1;
+        }
+        #cherub-left-container, #cherub-right-container {
+            width: 30%;
+            height: 60%;
+            z-index: 2;
+        }
+        #cherub-left-container .stylized-image {
+            transform: scaleX(-1);
         }
         
         /* About Panel (Panel 2) */
@@ -107,7 +127,6 @@
         .main-title { font-size: 1.8rem; line-height: 1.2; }
         .subtitle { font-weight: 400; font-size: 1rem; color: #cbd5e0; }
         
-        /* Updated Button Styles */
         .cta-button { @apply inline-block bg-transparent border-2 border-gray-500 text-gray-300 hover:bg-gray-800 hover:border-gray-700 font-semibold py-2 px-6 rounded-md text-sm tracking-wide transition-colors duration-300 shadow-md; }
         .sub-cta-link { 
             position: relative;
@@ -130,7 +149,7 @@
             left: 0;
             background: #e2e8f0;
         }
-        
+
         /* Institutional Logos in Hero */
         .institutional-logos {
             position: absolute;
@@ -138,14 +157,14 @@
             left: 1.5rem;
             display: flex;
             align-items: center;
-            gap: 1.5rem; /* Increased gap */
+            gap: 1.5rem;
             z-index: 20;
         }
         .inst-logo {
             height: 32px;
         }
         .ukri-logo {
-            filter: invert(1) grayscale(1) brightness(2); /* Makes dark logo white */
+            filter: invert(1) grayscale(1) brightness(2);
         }
         
         /* --- TILE GALLERY STYLES --- */
@@ -195,32 +214,11 @@
         #modal-close-btn { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; color: #9ca3af; font-size: 2.5rem; cursor: pointer; line-height: 1; transition: color 0.3s ease, transform 0.3s ease; }
         #modal-close-btn:hover { color: #ffffff; transform: scale(1.1); }
         
-        /* --- Scroll Arrow Indicators --- */
-        .scroll-indicator {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 20;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-            cursor: pointer;
-        }
-        .scroll-panel:hover .scroll-indicator {
-            opacity: 0.5;
-            pointer-events: all;
-        }
-        .scroll-indicator:hover {
-            opacity: 1;
-            background-color: rgba(255,255,255,0.1);
-        }
-        .scroll-indicator.up { top: 5rem; } /* Adjusted for header */
+        /* Scroll Arrow Indicators */
+        .scroll-indicator { position: absolute; left: 50%; transform: translateX(-50%); z-index: 20; width: 40px; height: 40px; border-radius: 50%; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; cursor: pointer; }
+        .scroll-panel:hover .scroll-indicator { opacity: 0.5; pointer-events: all; }
+        .scroll-indicator:hover { opacity: 1; background-color: rgba(255,255,255,0.1); }
+        .scroll-indicator.up { top: 5rem; }
         .scroll-indicator.down { bottom: 1.5rem; }
         .scroll-indicator svg { width: 24px; height: 24px; stroke: #a0aec0; }
         
@@ -269,9 +267,15 @@
                 </div>
             </div>
             <div class="image-area-wrapper">
-                <img src="https://dl.dropboxusercontent.com/scl/fi/8xizecipq9fug5svoisxx/cherub_NW-gate_teal.png?rlkey=ggkcgm8zt3j20xredw8su8e2e" 
-                     alt="Stylized image of a cherub from the North West Gate at Aphrodisias"
-                     class="stylized-image" id="parallax-image">
+                <div class="image-container" id="inscription-container">
+                    <img src="https://www.dropbox.com/scl/fi/l7d58i96v27gbcgebtmtv/NW-gate_gibberish-but-good-palette.png?rlkey=97vvreo0izjg295nq9l6g1cwy&dl=1" alt="A marble inscription with golden lettering from Aphrodisias" class="stylized-image">
+                </div>
+                <div class="image-container" id="cherub-left-container">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/8xizecipq9fug5svoisxx/cherub_NW-gate_teal.png?rlkey=ggkcgm8zt3j20xredw8su8e2e" alt="Stylized image of a cherub" class="stylized-image">
+                </div>
+                <div class="image-container" id="cherub-right-container">
+                    <img src="https://dl.dropboxusercontent.com/scl/fi/8xizecipq9fug5svoisxx/cherub_NW-gate_teal.png?rlkey=ggkcgm8zt3j20xredw8su8e2e" alt="Stylized image of a cherub" class="stylized-image">
+                </div>
             </div>
             <div class="institutional-logos">
                 <img src="https://communications.admin.ox.ac.uk/sites/all/themes/custom/oxtheme/images/brandmark/svg/oxlogo-rect-border.svg" alt="University of Oxford Logo" class="inst-logo">
@@ -316,26 +320,39 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- ===== MODIFIED TILE 2 (Hadrianic Baths) ===== -->
                 <div class="tile tile-2">
                     <div class="tile-inner">
                         <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/GdZnVql1TZC9lDo6jaVl6g/1" loading="lazy"></iframe>
                             <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/GdZnVql1TZC9lDo6jaVl6g/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
                         </div>
                         <div class="tile-face tile-back bg-green-dark"><button class="flip-back-btn">&times;</button>
-                            <div><h3 class="font-cinzel text-xl mb-2">The Hadrianic Baths</h3><p class="text-sm text-gray-300">A major centre of public life, the baths reveal ongoing civic investment and its enduring importance to the community deep into late antiquity.</p></div>
+                            <div>
+                                <h3 class="font-cinzel text-xl mb-2">The Hadrianic Baths</h3>
+                                <p class="text-sm text-gray-300">A major centre of public life, the baths reveal ongoing civic investment and its enduring importance to the community deep into late antiquity.</p>
+                                <!-- New Button for Interactive Plan -->
+                                <button class="plan-btn mt-4 inline-block bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs py-2 px-4 rounded-md transition-colors duration-300 tracking-wide uppercase" data-plan-src="Had baths_all based_Zenos added.html">
+                                    View Interactive Plan
+                                </button>
+                                <!-- End of New Button -->
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- ===== END OF MODIFICATION ===== -->
+
                 <div class="tile tile-3">
                     <div class="tile-inner">
-                        <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/vtGfZAOpRbe-MmfzgymmyQ/1" loading="lazy"></iframe>
-                            <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/vtGfZAOpRbe-MmfzgymmyQ/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
+                        <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/1GqbZ5daQxScOxvwpW_6Pg/1" loading="lazy"></iframe>
+                            <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/1GqbZ5daQxScOxvwpW_6Pg/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
                         </div>
                         <div class="tile-face tile-back bg-blue-dark"><button class="flip-back-btn">&times;</button>
-                            <div><h3 class="font-cinzel text-xl mb-2">North West Gate</h3><p class="text-sm text-gray-300">Part of the late antique fortifications, this monumental gate was a key entry point, showcasing the city's focus on security and civic pride.</p></div>
+                            <div><h3 class="font-cinzel text-xl mb-2">Place of Palms</h3><p class="text-sm text-gray-300">Place of Palms is a massive public space complete with the largest pool surviving from antiquity and hundreds of graffiti around it.</p></div>
                         </div>
                     </div>
                 </div>
+                
                 <div class="tile tile-4">
                     <div class="tile-inner">
                         <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/k-qkln37Qt6vBvhNFBFJDw/1" loading="lazy"></iframe>
@@ -370,33 +387,45 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const parallaxImage = document.getElementById('parallax-image');
-            if (parallaxImage) {
-                const heroSection = document.getElementById('hero');
-                const intensity = 30;
-                let targetX = 0, targetY = 0;
-                let currentX = 0, currentY = 0;
-                const smoothing = 0.05;
+            const heroSection = document.getElementById('hero');
+            const inscription = document.getElementById('inscription-container');
+            const cherubLeft = document.getElementById('cherub-left-container');
+            const cherubRight = document.getElementById('cherub-right-container');
+            
+            if (heroSection && inscription && cherubLeft && cherubRight) {
+                if (window.innerWidth < 768) return;
 
-                function updateParallax() {
-                    currentX += (targetX - currentX) * smoothing;
-                    currentY += (targetY - currentY) * smoothing;
-                    parallaxImage.style.transform = `translateX(${currentX}px) translateY(${currentY}px)`;
-                    requestAnimationFrame(updateParallax);
+                let animationState = { target: 0, current: 0, smoothing: 0.05 };
+                const animParams = {
+                    inscription: { startY: 20, endY: -80, startScale: 0.8, endScale: 1.25 },
+                    cherubLeft: { startX: -200, endX: -135, startY: -50, endY: -20, startOpacity: 0, endOpacity: 1 },
+                    cherubRight: { startX: 100, endX: 35, startY: -50, endY: -20, startOpacity: 0, endOpacity: 1 }
+                };
+                const lerp = (start, end, t) => start * (1 - t) + end * t;
+
+                function updateAnimation() {
+                    animationState.current += (animationState.target - animationState.current) * animationState.smoothing;
+                    if (Math.abs(animationState.target - animationState.current) < 0.001) {
+                        animationState.current = animationState.target;
+                    }
+                    const t = animationState.current;
+                    const insY = lerp(animParams.inscription.startY, animParams.inscription.endY, t);
+                    const insScale = lerp(animParams.inscription.startScale, animParams.inscription.endScale, t);
+                    inscription.style.transform = `translate(-50%, ${insY}%) scale(${insScale})`;
+                    const cLeftX = lerp(animParams.cherubLeft.startX, animParams.cherubLeft.endX, t);
+                    const cLeftY = lerp(animParams.cherubLeft.startY, animParams.cherubLeft.endY, t);
+                    cherubLeft.style.transform = `translate(${cLeftX}%, ${cLeftY}%)`;
+                    cherubLeft.style.opacity = lerp(animParams.cherubLeft.startOpacity, animParams.cherubLeft.endOpacity, t);
+                    const cRightX = lerp(animParams.cherubRight.startX, animParams.cherubRight.endX, t);
+                    const cRightY = lerp(animParams.cherubRight.startY, animParams.cherubRight.endY, t);
+                    cherubRight.style.transform = `translate(${cRightX}%, ${cRightY}%)`;
+                    cherubRight.style.opacity = lerp(animParams.cherubRight.startOpacity, animParams.cherubRight.endOpacity, t);
+                    requestAnimationFrame(updateAnimation);
                 }
-                requestAnimationFrame(updateParallax);
+                updateAnimation();
 
-                heroSection.addEventListener('mousemove', (e) => {
-                    const { clientX, clientY } = e;
-                    const { offsetWidth, offsetHeight } = heroSection;
-                    targetX = (clientX / offsetWidth - 0.5) * intensity * -1;
-                    targetY = (clientY / offsetHeight - 0.5) * intensity * -1;
-                });
-                
-                heroSection.addEventListener('mouseleave', () => {
-                    targetX = 0;
-                    targetY = 0;
-                });
+                heroSection.addEventListener('mouseenter', () => { animationState.target = 1; });
+                heroSection.addEventListener('mouseleave', () => { animationState.target = 0; });
             }
 
             const panels = document.querySelectorAll('.scroll-panel');
@@ -420,15 +449,9 @@
                 }, scrollDuration);
             }
 
-            if (aboutBtn) {
-                aboutBtn.addEventListener('click', (e) => { e.preventDefault(); scrollToPanel(1); });
-            }
-            if (navAboutBtn) {
-                navAboutBtn.addEventListener('click', (e) => { e.preventDefault(); scrollToPanel(1); });
-            }
-            if (exploreBtn) {
-                exploreBtn.addEventListener('click', (e) => { e.preventDefault(); scrollToPanel(2); });
-            }
+            if (aboutBtn) { aboutBtn.addEventListener('click', (e) => { e.preventDefault(); scrollToPanel(1); }); }
+            if (navAboutBtn) { navAboutBtn.addEventListener('click', (e) => { e.preventDefault(); scrollToPanel(1); }); }
+            if (exploreBtn) { exploreBtn.addEventListener('click', (e) => { e.preventDefault(); scrollToPanel(2); }); }
             scrollIndicators.forEach(indicator => {
                 indicator.addEventListener('click', (e) => {
                     const targetIndex = parseInt(e.currentTarget.dataset.targetPanel);
@@ -468,13 +491,12 @@
                 const infoBtn = tile.querySelector('.info-icon');
                 const expandBtn = tile.querySelector('.expand-btn');
                 const flipBackBtn = tile.querySelector('.flip-back-btn');
+                const planBtn = tile.querySelector('.plan-btn'); // <-- Find the new plan button
 
-                if(infoBtn) {
-                    infoBtn.addEventListener('click', (e) => { e.stopPropagation(); tile.classList.add('is-flipped'); });
-                }
-                if(flipBackBtn) {
-                    flipBackBtn.addEventListener('click', (e) => { e.stopPropagation(); tile.classList.remove('is-flipped'); });
-                }
+                if(infoBtn) { infoBtn.addEventListener('click', (e) => { e.stopPropagation(); tile.classList.add('is-flipped'); }); }
+                if(flipBackBtn) { flipBackBtn.addEventListener('click', (e) => { e.stopPropagation(); tile.classList.remove('is-flipped'); }); }
+                
+                // Listener for the 3D Model (front button)
                 if(expandBtn) {
                     expandBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -485,23 +507,28 @@
                         }
                     });
                 }
+                
+                // <-- New listener for the 2D Plan (back button) -->
+                if(planBtn) {
+                    planBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const planSrc = planBtn.dataset.planSrc;
+                        if (planSrc) {
+                            modalIframe.src = planSrc;
+                            modal.classList.add('visible');
+                        }
+                    });
+                }
+                // <-- End of new listener -->
             });
             
             function closeModal() {
                 modal.classList.remove('visible');
-                modalIframe.src = ''; 
+                modalIframe.src = ''; // Clear src on close to stop content (like Nira models) from running
             }
 
-            if(closeModalBtn) {
-                closeModalBtn.addEventListener('click', closeModal);
-            }
-            if(modal){
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        closeModal();
-                    }
-                });
-            }
+            if(closeModalBtn) { closeModalBtn.addEventListener('click', closeModal); }
+            if(modal){ modal.addEventListener('click', (e) => { if (e.target === modal) { closeModal(); } }); }
         });
     </script>
 </body>
