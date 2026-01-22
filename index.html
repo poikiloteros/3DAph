@@ -170,41 +170,86 @@
         /* --- TILE GALLERY STYLES --- */
         .tile-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr); /* Clean 3-column layout */
+            grid-auto-rows: minmax(250px, 1fr); /* Ensures nice landscape aspect ratio */
             width: 100%;
-            flex-grow: 1;
-            gap: 8px;
-            padding: 8px;
+            height: 100%;
+            gap: 16px; /* Increased gap for cleaner separation */
+            padding: 16px;
             box-sizing: border-box;
+            max-width: 1600px; /* Prevent stretching on huge screens */
+            margin: 0 auto;
         }
-        .tile { position: relative; perspective: 1200px; }
-        .tile-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); transform-style: preserve-3d; }
+        .tile { position: relative; perspective: 1200px; width: 100%; height: 100%; }
+        .tile-inner { position: relative; width: 100%; height: 100%; transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1); transform-style: preserve-3d; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
         .tile.is-flipped .tile-inner { transform: rotateY(180deg); }
-        .tile-face { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; overflow: hidden; display: flex; justify-content: center; align-items: center; border-radius: 0.25rem; }
-        .tile-front { background-color: #000; transition: filter 0.4s ease; filter: grayscale(80%) opacity(0.7); }
+        .tile-face { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; overflow: hidden; display: flex; justify-content: center; align-items: center; border-radius: 0.5rem; }
+        
+        /* Updated Front Styles for better visibility */
+        .tile-front { 
+            background-color: #000; 
+            transition: filter 0.4s ease; 
+            filter: grayscale(20%) opacity(0.95); /* Minimal filter to keep models popping */
+        }
         .tile:hover .tile-front { filter: grayscale(0) opacity(1); }
-        .tile-front iframe { width: 100%; height: 100%; object-fit: cover; border: none; pointer-events: none; }
-        .tile-back { color: white; transform: rotateY(180deg); padding: 1.5rem; text-align: center; border: 1px solid #3a4a4a; }
+        
+        /* FIXED: Iframe scaling removed to show FULL model */
+        .tile-front iframe { 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+            pointer-events: none; /* Keeps it as a preview */
+        }
+        
+        /* Optional: Subtle overlay to dim the "sandwich menu" area if needed, 
+           but keeping iframe clean is prioritized */
+        
+        .tile-back { color: white; transform: rotateY(180deg); padding: 1.5rem; text-align: center; border: 1px solid #3a4a4a; display: flex; flex-direction: column; justify-content: center; }
+        
+        /* Tile Backgrounds */
         .bg-teal-dark { background-color: #1a2a2a; }
         .bg-green-dark { background-color: #1a2a25; }
         .bg-blue-dark { background-color: #1a252a; }
         .bg-slate-dark { background-color: #252a2a; }
         .bg-charcoal-dark { background-color: #2a2a2a; }
-        .tile-actions { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.4s ease; z-index: 5; }
+        .bg-indigo-dark { background-color: #1e1b2e; }
+        .bg-brown-dark { background-color: #2e241b; }
+
+        .tile-actions { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.1); opacity: 0; transition: opacity 0.4s ease; z-index: 5; pointer-events: none; }
         .tile:hover .tile-actions { opacity: 1; }
-        .action-icon { background: rgba(20, 20, 20, 0.7); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; padding: 0.75rem; cursor: pointer; transition: transform 0.3s ease, background-color 0.3s ease; }
+        
+        /* Only Info Icon remains on front, center aligned */
+        .action-icon { pointer-events: auto; background: rgba(20, 20, 20, 0.7); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50%; padding: 0.75rem; cursor: pointer; transition: transform 0.3s ease, background-color 0.3s ease; }
         .action-icon:hover { transform: scale(1.15); background: rgba(0, 0, 0, 0.8); }
         .action-icon svg { width: 2rem; height: 2rem; stroke: #fff; }
-        .info-icon { position: absolute; bottom: 1rem; padding: 0.5rem; }
-        .info-icon svg { width: 1.25rem; height: 1.25rem; }
+        
+        /* Adjusted info icon position */
+        .info-icon { position: absolute; bottom: 1rem; right: 1rem; padding: 0.5rem; }
+        .info-icon svg { width: 1.5rem; height: 1.5rem; }
+        
         .flip-back-btn { position: absolute; top: 0.75rem; right: 0.75rem; background: none; border: none; color: #9ca3af; font-size: 1.75rem; cursor: pointer; line-height: 1; transition: color 0.3s ease, transform 0.3s ease; }
         .flip-back-btn:hover { color: #ffffff; transform: scale(1.2); }
-        .tile-1 { grid-column: 1 / 3; grid-row: 1 / 3; }
-        .tile-2 { grid-column: 3 / 4; grid-row: 1 / 3; }
-        .tile-3 { grid-column: 4 / 5; grid-row: 1 / 3; }
-        .tile-4 { grid-column: 1 / 3; grid-row: 3 / 5; }
-        .tile-5 { grid-column: 3 / 5; grid-row: 3 / 5; }
+        
+        /* New Button Styles for Back of Card */
+        .card-action-btn {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #e2e8f0;
+            font-size: 0.75rem;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            margin-top: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+        .card-action-btn:hover {
+            background-color: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.4);
+            color: white;
+        }
 
         /* Fullscreen Modal Styles */
         #fullscreen-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 100; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease-in-out; }
@@ -230,9 +275,12 @@
         @media (min-width: 1024px) {
             .main-title { font-size: 2.5rem; }
         }
-        @media (max-width: 768px) {
-            .tile-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 40vh; height: auto; overflow-y: auto; }
-            .tile-1, .tile-2, .tile-3, .tile-4, .tile-5 { grid-column: span 1; grid-row: span 1; }
+        @media (max-width: 1024px) {
+             .tile-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            .tile-grid { grid-template-columns: 1fr; grid-auto-rows: 40vh; display: block; overflow-y: auto; }
+            .tile { margin-bottom: 16px; }
         }
     </style>
 </head>
@@ -308,68 +356,121 @@
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" /></svg>
             </button>
             <h2 class="font-cinzel text-3xl md:text-4xl text-center text-white mb-4 flex-shrink-0">Sites &amp; 3D Models</h2>
+            
             <div class="tile-grid">
-                <div class="tile tile-1">
+                
+                <!-- Tile 1: Temple-Church -->
+                <div class="tile">
                     <div class="tile-inner">
                         <div class="tile-face tile-front">
                             <iframe src="https://rcla.nira.app/a/0lUMCtupR0mr_7WJUDFUmw/1" loading="lazy"></iframe>
-                            <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/0lUMCtupR0mr_7WJUDFUmw/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
+                            <div class="tile-actions">
+                                <button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button>
+                            </div>
                         </div>
                         <div class="tile-face tile-back bg-teal-dark"><button class="flip-back-btn">&times;</button>
-                            <div><h3 class="font-cinzel text-xl mb-2">The Temple-Church</h3><p class="text-sm text-gray-300">The imperial temple of Aphrodite was dramatically converted into a Christian basilica, representing a vivid example of religious change in the urban landscape.</p></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ===== MODIFIED TILE 2 (Hadrianic Baths) ===== -->
-                <div class="tile tile-2">
-                    <div class="tile-inner">
-                        <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/GdZnVql1TZC9lDo6jaVl6g/1" loading="lazy"></iframe>
-                            <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/GdZnVql1TZC9lDo6jaVl6g/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
-                        </div>
-                        <div class="tile-face tile-back bg-green-dark"><button class="flip-back-btn">&times;</button>
                             <div>
-                                <h3 class="font-cinzel text-xl mb-2">The Hadrianic Baths</h3>
-                                <p class="text-sm text-gray-300">A major centre of public life, the baths reveal ongoing civic investment and its enduring importance to the community deep into late antiquity.</p>
-                                <!-- New Button for Interactive Plan -->
-                                <button class="plan-btn mt-4 inline-block bg-gray-700 hover:bg-gray-600 text-gray-200 text-xs py-2 px-4 rounded-md transition-colors duration-300 tracking-wide uppercase" data-plan-src="Had baths_all based_Zenos added.html">
-                                    View Interactive Plan
-                                </button>
-                                <!-- End of New Button -->
+                                <h3 class="font-cinzel text-xl mb-2">The Temple-Church</h3>
+                                <p class="text-sm text-gray-300">The imperial temple of Aphrodite was dramatically converted into a Christian basilica.</p>
+                                <button class="card-action-btn expand-btn" data-model-src="https://rcla.nira.app/a/0lUMCtupR0mr_7WJUDFUmw/1">View 3D Model</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- ===== END OF MODIFICATION ===== -->
 
-                <div class="tile tile-3">
+                <!-- Tile 2: Tetrastoon -->
+                <div class="tile">
                     <div class="tile-inner">
-                        <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/1GqbZ5daQxScOxvwpW_6Pg/1" loading="lazy"></iframe>
-                            <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/1GqbZ5daQxScOxvwpW_6Pg/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
+                        <div class="tile-face tile-front">
+                            <iframe src="https://rcla.nira.app/a/umLBD1OmSIaXpkyhTC0A_Q/1" loading="lazy"></iframe>
+                            <div class="tile-actions">
+                                <button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button>
+                            </div>
                         </div>
-                        <div class="tile-face tile-back bg-blue-dark"><button class="flip-back-btn">&times;</button>
-                            <div><h3 class="font-cinzel text-xl mb-2">Place of Palms</h3><p class="text-sm text-gray-300">Place of Palms is a massive public space complete with the largest pool surviving from antiquity and hundreds of graffiti around it.</p></div>
+                        <div class="tile-face tile-back bg-indigo-dark"><button class="flip-back-btn">&times;</button>
+                            <div>
+                                <h3 class="font-cinzel text-xl mb-2">The Tetrastoon</h3>
+                                <p class="text-sm text-gray-300">A colonnaded plaza built in the mid-4th century AD behind the Theatre.</p>
+                                <button class="card-action-btn expand-btn" data-model-src="https://rcla.nira.app/a/umLBD1OmSIaXpkyhTC0A_Q/1">View 3D Model</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                <div class="tile tile-4">
+
+                <!-- Tile 3: Theatre Baths -->
+                <div class="tile">
                     <div class="tile-inner">
-                        <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/k-qkln37Qt6vBvhNFBFJDw/1" loading="lazy"></iframe>
-                            <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/k-qkln37Qt6vBvhNFBFJDw/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
+                        <div class="tile-face tile-front">
+                            <iframe src="https://rcla.nira.app/a/YasqsB0wSd-6nsummgMWqQ/1" loading="lazy"></iframe>
+                            <div class="tile-actions">
+                                <button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button>
+                            </div>
+                        </div>
+                        <div class="tile-face tile-back bg-brown-dark"><button class="flip-back-btn">&times;</button>
+                            <div>
+                                <h3 class="font-cinzel text-xl mb-2">Theatre Baths</h3>
+                                <p class="text-sm text-gray-300">Located south of the Theatre, distinct from the Hadrianic Baths.</p>
+                                <button class="card-action-btn expand-btn" data-model-src="https://rcla.nira.app/a/YasqsB0wSd-6nsummgMWqQ/1">View 3D Model</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tile 4: Theatre -->
+                <div class="tile">
+                    <div class="tile-inner">
+                        <div class="tile-face tile-front">
+                            <iframe src="https://rcla.nira.app/a/BwH9d5ayQN6KdQep_JIUow/1" loading="lazy"></iframe>
+                            <div class="tile-actions">
+                                <button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button>
+                            </div>
                         </div>
                         <div class="tile-face tile-back bg-slate-dark"><button class="flip-back-btn">&times;</button>
-                            <div><h3 class="font-cinzel text-xl mb-2">Honours for Honorius</h3><p class="text-sm text-gray-300">This honorific statue base illustrates the continued practice of imperial representation and loyalty in the city during the early 5th century.</p></div>
+                            <div>
+                                <h3 class="font-cinzel text-xl mb-2">The Theatre</h3>
+                                <p class="text-sm text-gray-300">The primary civic performance venue, dedicated to Aphrodite and the Demos.</p>
+                                <button class="card-action-btn expand-btn" data-model-src="https://rcla.nira.app/a/BwH9d5ayQN6KdQep_JIUow/1">View 3D Model</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="tile tile-5">
+
+                <!-- Tile 5: Bouleuterion -->
+                <div class="tile">
                     <div class="tile-inner">
-                        <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/Diz5mSWRTZ2yyXNTOEAbVQ/1" loading="lazy"></iframe>
-                            <div class="tile-actions"><button class="action-icon expand-btn" data-model-src="https://rcla.nira.app/a/Diz5mSWRTZ2yyXNTOEAbVQ/1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m4.5 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg></button><button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button></div>
+                        <div class="tile-face tile-front">
+                            <iframe src="https://rcla.nira.app/a/DZbrjh7ATmudsqvnsxGImQ/1" loading="lazy"></iframe>
+                            <div class="tile-actions">
+                                <button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button>
+                            </div>
                         </div>
                         <div class="tile-face tile-back bg-charcoal-dark"><button class="flip-back-btn">&times;</button>
-                             <div><h3 class="font-cinzel text-xl mb-2">Honours for Julian/Theodosios</h3><p class="text-sm text-gray-300">A fascinating example of re-appropriation, this statue base was originally for the Emperor Julian and later re-inscribed for Theodosios.</p></div>
+                            <div>
+                                <h3 class="font-cinzel text-xl mb-2">Bouleuterion</h3>
+                                <p class="text-sm text-gray-300">The Council House was the meeting place of the city council.</p>
+                                <button class="card-action-btn expand-btn" data-model-src="https://rcla.nira.app/a/DZbrjh7ATmudsqvnsxGImQ/1">View 3D Model</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tile 6: Hadrianic Baths -->
+                <div class="tile">
+                    <div class="tile-inner">
+                        <div class="tile-face tile-front"><iframe src="https://rcla.nira.app/a/GdZnVql1TZC9lDo6jaVl6g/1" loading="lazy"></iframe>
+                            <div class="tile-actions">
+                                <button class="action-icon info-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" /></svg></button>
+                            </div>
+                        </div>
+                        <div class="tile-face tile-back bg-green-dark"><button class="flip-back-btn">&times;</button>
+                            <div>
+                                <h3 class="font-cinzel text-xl mb-2">The Hadrianic Baths</h3>
+                                <p class="text-sm text-gray-300">A major centre of public life, revealing ongoing civic investment.</p>
+                                <div class="flex flex-col items-center gap-2 mt-2">
+                                    <button class="card-action-btn expand-btn" data-model-src="https://rcla.nira.app/a/GdZnVql1TZC9lDo6jaVl6g/1">View 3D Model</button>
+                                    <button class="card-action-btn plan-btn" data-plan-src="Had baths_all based_Zenos added.html">View Interactive Plan</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -487,28 +588,49 @@
             const modalIframe = document.getElementById('modal-iframe');
             const closeModalBtn = document.getElementById('modal-close-btn');
 
+            // 1. Initial State: Randomly flip some cards (approx 50%)
             tiles.forEach(tile => {
-                const infoBtn = tile.querySelector('.info-icon');
-                const expandBtn = tile.querySelector('.expand-btn');
-                const flipBackBtn = tile.querySelector('.flip-back-btn');
-                const planBtn = tile.querySelector('.plan-btn'); // <-- Find the new plan button
+                // Determine if this tile starts flipped (Info side)
+                if (Math.random() > 0.5) {
+                    tile.classList.add('is-flipped');
+                }
 
-                if(infoBtn) { infoBtn.addEventListener('click', (e) => { e.stopPropagation(); tile.classList.add('is-flipped'); }); }
-                if(flipBackBtn) { flipBackBtn.addEventListener('click', (e) => { e.stopPropagation(); tile.classList.remove('is-flipped'); }); }
+                const infoBtn = tile.querySelector('.info-icon');
+                const expandBtns = tile.querySelectorAll('.expand-btn'); // Now selects all expand buttons (including new back buttons)
+                const flipBackBtn = tile.querySelector('.flip-back-btn');
+                const planBtn = tile.querySelector('.plan-btn');
+
+                // User Interaction: Info Button flips to back
+                if(infoBtn) { 
+                    infoBtn.addEventListener('click', (e) => { 
+                        e.stopPropagation(); 
+                        tile.classList.add('is-flipped'); 
+                    }); 
+                }
                 
-                // Listener for the 3D Model (front button)
-                if(expandBtn) {
-                    expandBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const modelSrc = expandBtn.dataset.modelSrc;
-                        if (modelSrc) {
-                            modalIframe.src = modelSrc;
-                            modal.classList.add('visible');
-                        }
+                // User Interaction: 'X' Button flips to front
+                if(flipBackBtn) { 
+                    flipBackBtn.addEventListener('click', (e) => { 
+                        e.stopPropagation(); 
+                        tile.classList.remove('is-flipped'); 
+                    }); 
+                }
+                
+                // Expand Button: Opens Modal (Applied to all buttons with this class)
+                if(expandBtns.length > 0) {
+                    expandBtns.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const modelSrc = btn.dataset.modelSrc;
+                            if (modelSrc) {
+                                modalIframe.src = modelSrc;
+                                modal.classList.add('visible');
+                            }
+                        });
                     });
                 }
                 
-                // <-- New listener for the 2D Plan (back button) -->
+                // Plan Button: Opens Modal
                 if(planBtn) {
                     planBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -519,12 +641,23 @@
                         }
                     });
                 }
-                // <-- End of new listener -->
             });
+
+            // 2. Auto-Flip Logic: Flip one random card every 4 seconds
+            setInterval(() => {
+                const randomIndex = Math.floor(Math.random() * tiles.length);
+                const randomTile = tiles[randomIndex];
+                
+                if (randomTile.classList.contains('is-flipped')) {
+                    randomTile.classList.remove('is-flipped');
+                } else {
+                    randomTile.classList.add('is-flipped');
+                }
+            }, 4000); 
             
             function closeModal() {
                 modal.classList.remove('visible');
-                modalIframe.src = ''; // Clear src on close to stop content (like Nira models) from running
+                modalIframe.src = ''; 
             }
 
             if(closeModalBtn) { closeModalBtn.addEventListener('click', closeModal); }
